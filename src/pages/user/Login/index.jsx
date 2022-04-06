@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 import { login } from '@/services/ant-design-pro/api';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import styles from './index.less';
+import Cookies from 'js-cookie';
 
 const LoginMessage = ({ content }) => (
   <Alert
@@ -43,7 +44,7 @@ const Login = () => {
   const handleSubmit = async (values) => {
     try {
       // 登录
-      const msg = await login({ ...values, type });
+      const msg = await login({ ...values });
 
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
@@ -89,21 +90,21 @@ const Login = () => {
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
-            <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
-            <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
-          ]}
+          // actions={[
+          //   <FormattedMessage
+          //     key="loginWith"
+          //     id="pages.login.loginWith"
+          //     defaultMessage="其他登录方式"
+          //   />,
+          //   <AlipayCircleOutlined key="AlipayCircleOutlined" className={styles.icon} />,
+          //   <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
+          //   <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
+          // ]}
           onFinish={async (values) => {
             await handleSubmit(values);
           }}
         >
-          <Tabs activeKey={type} onChange={setType}>
+          {/* <Tabs activeKey={type} onChange={setType}>
             <Tabs.TabPane
               key="account"
               tab={intl.formatMessage({
@@ -118,7 +119,7 @@ const Login = () => {
                 defaultMessage: '手机号登录',
               })}
             />
-          </Tabs>
+          </Tabs> */}
 
           {status === 'error' && loginType === 'account' && (
             <LoginMessage
@@ -131,7 +132,7 @@ const Login = () => {
           {type === 'account' && (
             <>
               <ProFormText
-                name="username"
+                name="email"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -262,7 +263,7 @@ const Login = () => {
               />
             </>
           )}
-          <div
+          {/* <div
             style={{
               marginBottom: 24,
             }}
@@ -277,7 +278,7 @@ const Login = () => {
             >
               <FormattedMessage id="pages.login.forgotPassword" defaultMessage="忘记密码" />
             </a>
-          </div>
+          </div> */}
         </LoginForm>
       </div>
       <Footer />

@@ -37,11 +37,17 @@ export default [
       },
     ],
   },
+  // {
+  //   name: 'list.table-list',
+  //   icon: 'table',
+  //   path: '/list',
+  //   component: './TableList',
+  // },
   {
-    name: 'list.table-list',
+    name: 'Students',
     icon: 'table',
-    path: '/list',
-    component: './TableList',
+    path: '/students',
+    component: './StudentList',
   },
   {
     path: '/',

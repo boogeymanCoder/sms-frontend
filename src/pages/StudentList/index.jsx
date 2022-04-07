@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, Input, Drawer } from 'antd';
+import { Button, message, Input, Drawer, Tag, Popconfirm } from 'antd';
 import React, { useState, useRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
@@ -8,7 +8,7 @@ import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import UpdateForm from './components/UpdateForm';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { getStudentsList } from '@/services/students';
+import { deleteStudent, getStudentsList } from '@/services/students';
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -66,10 +66,8 @@ const handleRemove = async (selectedRows) => {
   if (!selectedRows) return true;
 
   try {
-    await removeRule({
-      key: selectedRows.map((row) => row.key),
-    });
     hide();
+    await selectedRows.map(async (row) => await deleteStudent(row.id));
     message.success('Deleted successfully and will refresh soon');
     return true;
   } catch (error) {
@@ -110,7 +108,9 @@ const TableList = () => {
       tip: "The student's lrn is unique",
       hideInDescriptions: true,
       fixed: 'left',
-      width: 130,
+      defaultSortOrder: 'ascend',
+      sorter: true,
+      width: 150,
       render: (dom, entity) => {
         return (
           <a
@@ -130,6 +130,8 @@ const TableList = () => {
       ),
       dataIndex: 'first_name',
       valueType: 'textarea',
+      sorter: true,
+      width: 150,
     },
     {
       title: (
@@ -137,28 +139,102 @@ const TableList = () => {
       ),
       dataIndex: 'middle_name',
       valueType: 'textarea',
+      sorter: true,
+      width: 150,
     },
     {
       title: <FormattedMessage id="pages.searchTable.title.lastName" defaultMessage="Last name" />,
       dataIndex: 'last_name',
       valueType: 'textarea',
+      sorter: true,
+      width: 150,
     },
     {
       title: <FormattedMessage id="pages.searchTable.title.age" defaultMessage="Age" />,
       dataIndex: 'age',
       valueType: 'textarea',
+      width: 50,
+      sorter: true,
     },
     {
       title: (
         <FormattedMessage id="pages.searchTable.title.yearLevel" defaultMessage="Year level" />
       ),
+      width: 150,
       dataIndex: 'year_level',
-      valueType: 'textarea',
+      sorter: true,
+      valueEnum: {
+        '1ST YEAR': {
+          text: intl.formatMessage({
+            id: 'pages.searchTable.yearLevel.1stYear',
+            defaultMessage: '1ST YEAR',
+          }),
+        },
+        '2ND YEAR': {
+          text: intl.formatMessage({
+            id: 'pages.searchTable.yearLevel.2ndYear',
+            defaultMessage: '2ND YEAR',
+          }),
+        },
+        '3RD YEAR': {
+          text: intl.formatMessage({
+            id: 'pages.searchTable.yearLevel.3rdYear',
+            defaultMessage: '3RD YEAR',
+          }),
+        },
+        '4TH YEAR': {
+          text: intl.formatMessage({
+            id: 'pages.searchTable.yearLevel.4thYear',
+            defaultMessage: '4TH YEAR',
+          }),
+        },
+      },
+      render: (dom, entity) => {
+        if (entity.year_level === '1ST YEAR') {
+          return (
+            <Tag color="orange">
+              {intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.1stYear',
+                defaultMessage: '1ST YEAR',
+              })}
+            </Tag>
+          );
+        } else if (entity.year_level === '2ND YEAR') {
+          return (
+            <Tag color="cyan">
+              {intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.2ndYear',
+                defaultMessage: '2ND YEAR',
+              })}
+            </Tag>
+          );
+        } else if (entity.year_level === '3RD YEAR') {
+          return (
+            <Tag color="green">
+              {intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.3rdYear',
+                defaultMessage: '3RD YEAR',
+              })}
+            </Tag>
+          );
+        } else if (entity.year_level === '4TH YEAR') {
+          return (
+            <Tag color="blue">
+              {' '}
+              {intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.4thYear',
+                defaultMessage: '4TH YEAR',
+              })}
+            </Tag>
+          );
+        }
+      },
     },
     {
       title: <FormattedMessage id="pages.searchTable.title.section" defaultMessage="Section" />,
       dataIndex: 'section',
       valueType: 'textarea',
+      sorter: true,
     },
     {
       title: <FormattedMessage id="pages.searchTable.title.actions" defaultMessage="Actions" />,
@@ -175,9 +251,29 @@ const TableList = () => {
         >
           <FormattedMessage id="pages.searchTable.actions.edit" defaultMessage="Edit" />
         </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage id="pages.searchTable.actions.delete" defaultMessage="Delete" />
-        </a>,
+        <Popconfirm
+          key="delete"
+          title={intl.formatMessage({
+            id: 'pages.searchTable.areYouSure',
+            defaultMessage: 'Are you sure?',
+          })}
+          okText={intl.formatMessage({
+            id: 'pages.searchTable.yes',
+            defaultMessage: 'Yes',
+          })}
+          cancelText={intl.formatMessage({
+            id: 'pages.searchTable.no',
+            defaultMessage: 'No',
+          })}
+          onConfirm={() => {
+            handleRemove([record]);
+            actionRef.current?.reloadAndRest?.();
+          }}
+        >
+          <a href="#">
+            <FormattedMessage id="pages.searchTable.actions.delete" defaultMessage="Delete" />
+          </a>
+        </Popconfirm>,
       ],
     },
   ];
@@ -190,7 +286,7 @@ const TableList = () => {
         })}
         actionRef={actionRef}
         rowKey="key"
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1000 }}
         search={{
           labelWidth: 120,
         }}
@@ -230,20 +326,45 @@ const TableList = () => {
             </div>
           }
         >
-          <Button
-            type="primary"
-            danger
-            onClick={async () => {
+          <Popconfirm
+            key="delete"
+            title={intl.formatMessage({
+              id: 'pages.searchTable.areYouSure',
+              defaultMessage: 'Are you sure?',
+            })}
+            okText={intl.formatMessage({
+              id: 'pages.searchTable.yes',
+              defaultMessage: 'Yes',
+            })}
+            cancelText={intl.formatMessage({
+              id: 'pages.searchTable.no',
+              defaultMessage: 'No',
+            })}
+            onConfirm={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            <FormattedMessage
-              id="pages.searchTable.batchDeletion"
-              defaultMessage="Batch deletion"
-            />
-          </Button>
+            {/* <a href="#">
+              <FormattedMessage id="pages.searchTable.actions.delete" defaultMessage="Delete" />
+            </a> */}
+
+            <Button
+              type="primary"
+              danger
+              // onClick={async () => {
+              //   await handleRemove(selectedRowsState);
+              //   setSelectedRows([]);
+              //   actionRef.current?.reloadAndRest?.();
+              // }}
+            >
+              <FormattedMessage
+                id="pages.searchTable.batchDeletion"
+                defaultMessage="Batch deletion"
+              />
+            </Button>
+          </Popconfirm>
         </FooterToolbar>
       )}
       <ModalForm

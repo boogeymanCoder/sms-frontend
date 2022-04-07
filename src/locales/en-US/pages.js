@@ -81,4 +81,13 @@ export default {
   'pages.searchTable.title.actions': 'Actions',
   'pages.searchTable.actions.edit': 'Edit',
   'pages.searchTable.actions.delete': 'Delete',
+  'pages.searchTable.areYouSure': 'Are you sure?',
+  'pages.searchTable.yes': 'Yes',
+  'pages.searchTable.no': 'No',
+
+  // year level
+  'pages.searchTable.yearLevel.1stYear': '1ST YEAR',
+  'pages.searchTable.yearLevel.2ndYear': '2ND YEAR',
+  'pages.searchTable.yearLevel.3rdYear': '3RD YEAR',
+  'pages.searchTable.yearLevel.4thYear': '4TH YEAR',
 };

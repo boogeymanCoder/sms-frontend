@@ -69,4 +69,16 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'bacth deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+
+  // columns
+  'pages.searchTable.title.studentLrn': 'Student LRN',
+  'pages.searchTable.title.firstName': 'First name',
+  'pages.searchTable.title.middleName': 'Middle name',
+  'pages.searchTable.title.lastName': 'Last name',
+  'pages.searchTable.title.age': 'Age',
+  'pages.searchTable.title.yearLevel': 'Year level',
+  'pages.searchTable.title.section': 'Section',
+  'pages.searchTable.title.actions': 'Actions',
+  'pages.searchTable.actions.edit': 'Edit',
+  'pages.searchTable.actions.delete': 'Delete',
 };

@@ -263,6 +263,7 @@ const TableList = () => {
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
+            console.log({ selectedRows });
             setSelectedRows(selectedRows);
           },
         }}

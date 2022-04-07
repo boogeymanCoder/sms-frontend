@@ -8,6 +8,7 @@ import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import UpdateForm from './components/UpdateForm';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
+import { getStudentsList } from '@/services/students';
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -103,13 +104,13 @@ const TableList = () => {
   const columns = [
     {
       title: (
-        <FormattedMessage
-          id="pages.searchTable.updateForm.ruleName.nameLabel"
-          defaultMessage="Rule name"
-        />
+        <FormattedMessage id="pages.searchTable.title.studentLrn" defaultMessage="Student LRN" />
       ),
-      dataIndex: 'name',
-      tip: 'The rule name is the unique key',
+      dataIndex: 'student_lrn',
+      tip: "The student's lrn is unique",
+      hideInDescriptions: true,
+      fixed: 'left',
+      width: 130,
       render: (dom, entity) => {
         return (
           <a
@@ -124,99 +125,46 @@ const TableList = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleDesc" defaultMessage="Description" />,
-      dataIndex: 'desc',
+      title: (
+        <FormattedMessage id="pages.searchTable.title.firstName" defaultMessage="First name" />
+      ),
+      dataIndex: 'first_name',
       valueType: 'textarea',
     },
     {
       title: (
-        <FormattedMessage
-          id="pages.searchTable.titleCallNo"
-          defaultMessage="Number of service calls"
-        />
+        <FormattedMessage id="pages.searchTable.title.middleName" defaultMessage="Middle name" />
       ),
-      dataIndex: 'callNo',
-      sorter: true,
-      hideInForm: true,
-      renderText: (val) =>
-        `${val}${intl.formatMessage({
-          id: 'pages.searchTable.tenThousand',
-          defaultMessage: ' 万 ',
-        })}`,
+      dataIndex: 'middle_name',
+      valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
-      dataIndex: 'status',
-      hideInForm: true,
-      valueEnum: {
-        0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
-          status: 'Default',
-        },
-        1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
-          ),
-          status: 'Processing',
-        },
-        2: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
-          ),
-          status: 'Success',
-        },
-        3: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.abnormal"
-              defaultMessage="Abnormal"
-            />
-          ),
-          status: 'Error',
-        },
-      },
+      title: <FormattedMessage id="pages.searchTable.title.lastName" defaultMessage="Last name" />,
+      dataIndex: 'last_name',
+      valueType: 'textarea',
+    },
+    {
+      title: <FormattedMessage id="pages.searchTable.title.age" defaultMessage="Age" />,
+      dataIndex: 'age',
+      valueType: 'textarea',
     },
     {
       title: (
-        <FormattedMessage
-          id="pages.searchTable.titleUpdatedAt"
-          defaultMessage="Last scheduled time"
-        />
+        <FormattedMessage id="pages.searchTable.title.yearLevel" defaultMessage="Year level" />
       ),
-      sorter: true,
-      dataIndex: 'updatedAt',
-      valueType: 'dateTime',
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
-
-        if (`${status}` === '0') {
-          return false;
-        }
-
-        if (`${status}` === '3') {
-          return (
-            <Input
-              {...rest}
-              placeholder={intl.formatMessage({
-                id: 'pages.searchTable.exception',
-                defaultMessage: 'Please enter the reason for the exception!',
-              })}
-            />
-          );
-        }
-
-        return defaultRender(item);
-      },
+      dataIndex: 'year_level',
+      valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
-      dataIndex: 'option',
+      title: <FormattedMessage id="pages.searchTable.title.section" defaultMessage="Section" />,
+      dataIndex: 'section',
+      valueType: 'textarea',
+    },
+    {
+      title: <FormattedMessage id="pages.searchTable.title.actions" defaultMessage="Actions" />,
       valueType: 'option',
+      fixed: 'right',
+      width: 100,
       render: (_, record) => [
         <a
           key="config"
@@ -225,13 +173,10 @@ const TableList = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
+          <FormattedMessage id="pages.searchTable.actions.edit" defaultMessage="Edit" />
         </a>,
         <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
+          <FormattedMessage id="pages.searchTable.actions.delete" defaultMessage="Delete" />
         </a>,
       ],
     },
@@ -245,6 +190,7 @@ const TableList = () => {
         })}
         actionRef={actionRef}
         rowKey="key"
+        scroll={{ x: 1300 }}
         search={{
           labelWidth: 120,
         }}
@@ -259,10 +205,11 @@ const TableList = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={rule}
+        request={getStudentsList}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
+            console.log({ selectedRows });
             setSelectedRows(selectedRows);
           },
         }}
@@ -280,19 +227,12 @@ const TableList = () => {
                 {selectedRowsState.length}
               </a>{' '}
               <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
-              &nbsp;&nbsp;
-              <span>
-                <FormattedMessage
-                  id="pages.searchTable.totalServiceCalls"
-                  defaultMessage="Total number of service calls"
-                />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo, 0)}{' '}
-                <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
-              </span>
             </div>
           }
         >
           <Button
+            type="primary"
+            danger
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -302,12 +242,6 @@ const TableList = () => {
             <FormattedMessage
               id="pages.searchTable.batchDeletion"
               defaultMessage="Batch deletion"
-            />
-          </Button>
-          <Button type="primary">
-            <FormattedMessage
-              id="pages.searchTable.batchApproval"
-              defaultMessage="Batch approval"
             />
           </Button>
         </FooterToolbar>
@@ -382,15 +316,15 @@ const TableList = () => {
         }}
         closable={false}
       >
-        {currentRow?.name && (
+        {currentRow?.student_lrn && (
           <ProDescriptions
             column={2}
-            title={currentRow?.name}
+            title={currentRow?.student_lrn}
             request={async () => ({
               data: currentRow || {},
             })}
             params={{
-              id: currentRow?.name,
+              id: currentRow?.id,
             }}
             columns={columns}
           />

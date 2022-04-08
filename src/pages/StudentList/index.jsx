@@ -21,7 +21,7 @@ import { createStudent, deleteStudent, editStudent, getStudentsList } from '@/se
  */
 
 const handleAdd = async (fields) => {
-  const hide = message.loading('正在添加');
+  const hide = message.loading('Loading');
 
   try {
     await createStudent(fields);
@@ -63,7 +63,7 @@ const handleUpdate = async (id, fields) => {
  */
 
 const handleRemove = async (selectedRows) => {
-  const hide = message.loading('正在删除');
+  const hide = message.loading('Loading');
   if (!selectedRows) return true;
 
   try {
@@ -323,7 +323,7 @@ const TableList = () => {
               >
                 {selectedRowsState.length}
               </a>{' '}
-              <FormattedMessage id="pages.searchTable.item" defaultMessage="项" />
+              <FormattedMessage id="pages.searchTable.item" defaultMessage="item" />
             </div>
           }
         >

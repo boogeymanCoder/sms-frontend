@@ -49,7 +49,7 @@ const Login = () => {
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
-          defaultMessage: '登录成功！',
+          defaultMessage: 'Login successful!',
         });
         message.success(defaultLoginSuccessMessage);
         Cookies.set('accessToken', msg.token);
@@ -71,7 +71,7 @@ const Login = () => {
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+        defaultMessage: 'Login failed, please try again!',
       });
       message.error(defaultLoginFailureMessage);
     }
@@ -85,8 +85,8 @@ const Login = () => {
       </div>
       <div className={styles.content}>
         <LoginForm
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
+          logo={<img alt="logo" src="/sms_icon.png" />}
+          title="SMS"
           subTitle={intl.formatMessage({
             id: 'pages.layouts.userLayout.title',
           })}
@@ -128,7 +128,7 @@ const Login = () => {
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
+                defaultMessage: 'Incorrect username/password',
               })}
             />
           )}
@@ -169,7 +169,7 @@ const Login = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+          {/* {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           {type === 'mobile' && (
             <>
               <ProFormText
@@ -249,11 +249,13 @@ const Login = () => {
                     return;
                   }
 
-                  message.success('获取验证码成功！验证码为：1234');
+                  message.success(
+                    'Get the verification code successfully! The verification code is: 1234',
+                  );
                 }}
               />
             </>
-          )}
+          )} */}
           {/* <div
             style={{
               marginBottom: 24,

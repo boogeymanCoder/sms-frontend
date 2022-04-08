@@ -21,7 +21,8 @@ export async function getInitialState() {
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
-      return msg.data;
+      console.log('getInitialState:', { msg });
+      return msg;
     } catch (error) {
       history.push(loginPath);
     }
@@ -48,9 +49,6 @@ export const layout = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
-    waterMarkProps: {
-      content: initialState?.currentUser?.name,
-    },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history; // 如果没有登录，重定向到 login
@@ -59,18 +57,6 @@ export const layout = ({ initialState, setInitialState }) => {
         history.push(loginPath);
       }
     },
-    links: isDev
-      ? [
-          <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-            <LinkOutlined />
-            <span>OpenAPI 文档</span>
-          </Link>,
-          <Link to="/~docs" key="docs">
-            <BookOutlined />
-            <span>业务组件文档</span>
-          </Link>,
-        ]
-      : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -80,7 +66,7 @@ export const layout = ({ initialState, setInitialState }) => {
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
+          {/* {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -89,7 +75,7 @@ export const layout = ({ initialState, setInitialState }) => {
                 setInitialState((preInitialState) => ({ ...preInitialState, settings }));
               }}
             />
-          )}
+          )} */}
         </>
       );
     },

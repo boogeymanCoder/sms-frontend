@@ -24,7 +24,9 @@ export default {
   'pages.login.loginWith': 'Login with :',
   'pages.login.registerAccount': 'Register Account',
   'pages.welcome.advancedComponent': 'Advanced Component',
+  'pages.welcome.message': 'Welcome to Student Management System Admin',
   'pages.welcome.link': 'Welcome',
+  'pages.welcome.manageStudents': 'Manage Students',
   'pages.welcome.advancedLayout': 'Advanced Layout',
   'pages.welcome.alertMessage': 'Faster and stronger heavy-duty components have been released.',
   'pages.admin.subPage.title': 'This page can only be viewed by Admin',
@@ -67,4 +69,36 @@ export default {
   'pages.searchTable.tenThousand': '0000',
   'pages.searchTable.batchDeletion': 'bacth deletion',
   'pages.searchTable.batchApproval': 'batch approval',
+
+  // columns
+  'pages.searchTable.title.studentLrn': 'Student LRN',
+  'pages.searchTable.title.firstName': 'First name',
+  'pages.searchTable.title.middleName': 'Middle name',
+  'pages.searchTable.title.lastName': 'Last name',
+  'pages.searchTable.title.age': 'Age',
+  'pages.searchTable.title.yearLevel': 'Year level',
+  'pages.searchTable.title.section': 'Section',
+  'pages.searchTable.title.actions': 'Actions',
+  'pages.searchTable.actions.edit': 'Edit',
+  'pages.searchTable.actions.delete': 'Delete',
+  'pages.searchTable.areYouSure': 'Are you sure?',
+  'pages.searchTable.yes': 'Yes',
+  'pages.searchTable.no': 'No',
+
+  // year level
+  'pages.searchTable.yearLevel.1stYear': '1ST YEAR',
+  'pages.searchTable.yearLevel.2ndYear': '2ND YEAR',
+  'pages.searchTable.yearLevel.3rdYear': '3RD YEAR',
+  'pages.searchTable.yearLevel.4thYear': '4TH YEAR',
+
+  // form
+  'pages.searchTable.form.createStudent': 'Create Student',
+  'pages.searchTable.form.editStudent': 'Edit Student',
+  'pages.searchTable.form.studentLrn': 'Student LRN',
+  'pages.searchTable.form.firstName': 'First name',
+  'pages.searchTable.form.middleName': 'Middle name',
+  'pages.searchTable.form.lastName': 'Last name',
+  'pages.searchTable.form.age': 'Age',
+  'pages.searchTable.form.yearLevel': 'Year level',
+  'pages.searchTable.form.section': 'Section',
 };

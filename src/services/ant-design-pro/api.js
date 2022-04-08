@@ -1,11 +1,16 @@
 // @ts-ignore
 
 /* eslint-disable */
+import Cookies from 'js-cookie';
 import { request } from 'umi';
 /** 获取当前的用户 GET /api/currentUser */
 
 export async function currentUser(options) {
-  return request('/api/currentUser', {
+  const token = Cookies.get('accessToken');
+  return request(`${API_URL}/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     method: 'GET',
     ...(options || {}),
   });
@@ -21,7 +26,7 @@ export async function outLogin(options) {
 /** 登录接口 POST /api/login/account */
 
 export async function login(body, options) {
-  return request('/api/login/account', {
+  return request(`${API_URL}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

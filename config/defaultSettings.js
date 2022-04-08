@@ -1,15 +1,27 @@
 const Settings = {
   navTheme: 'light',
-  // 拂晓蓝
   primaryColor: '#1890ff',
   layout: 'mix',
   contentWidth: 'Fluid',
-  fixedHeader: false,
+  fixedHeader: true,
   fixSiderbar: true,
-  colorWeak: false,
-  title: 'Ant Design Pro',
-  pwa: false,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
-  iconfontUrl: '',
+  title: 'Student Management System',
+  pwa: true,
+  logo: '/sms_icon.png',
+  headerHeight: 48,
+  splitMenus: false,
 };
+// {
+//   navTheme: 'light',
+//   // 拂晓蓝
+//   primaryColor: '#1890ff',
+//   layout: 'mix',
+//   contentWidth: 'Fluid',
+//   fixedHeader: false,
+//   fixSiderbar: true,
+//   colorWeak: false,
+//   pwa: false,
+//   logo: '/sms_icon.png',
+//   iconfontUrl: '',
+// };
 export default Settings;

@@ -282,8 +282,8 @@ const TableList = () => {
     <PageContainer>
       <ProTable
         headerTitle={intl.formatMessage({
-          id: 'pages.searchTable.title',
-          defaultMessage: 'Enquiry form',
+          id: 'pages.searchTable.title.studentList',
+          defaultMessage: 'Student list',
         })}
         actionRef={actionRef}
         rowKey="key"

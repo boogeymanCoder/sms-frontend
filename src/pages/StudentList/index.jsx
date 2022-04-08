@@ -4,11 +4,16 @@ import React, { useState, useRef } from 'react';
 import { useIntl, FormattedMessage } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
-import { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import {
+  ModalForm,
+  ProFormDigit,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import UpdateForm from './components/UpdateForm';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { deleteStudent, getStudentsList } from '@/services/students';
+import { createStudent, deleteStudent, getStudentsList } from '@/services/students';
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -19,7 +24,7 @@ const handleAdd = async (fields) => {
   const hide = message.loading('正在添加');
 
   try {
-    await addRule({ ...fields });
+    await createStudent(fields);
     hide();
     message.success('Added successfully');
     return true;
@@ -391,42 +396,242 @@ const TableList = () => {
           rules={[
             {
               required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
-                />
-              ),
             },
           ]}
           width="md"
-          name="name"
+          name="student_lrn"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.studentLrn',
+            defaultMessage: 'Student LRN',
+          })}
         />
-        <ProFormTextArea width="md" name="desc" />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="first_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.firstName',
+            defaultMessage: 'First name',
+          })}
+        />
+        <ProFormText
+          width="md"
+          name="middle_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.middleName',
+            defaultMessage: 'Middle name',
+          })}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="last_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.lastName',
+            defaultMessage: 'Last name',
+          })}
+        />
+        <ProFormDigit
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="age"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.age',
+            defaultMessage: 'Age',
+          })}
+        />
+        <ProFormSelect
+          name="year_level"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.yearLevel',
+            defaultMessage: 'Year level',
+          })}
+          width="md"
+          valueEnum={{
+            '1ST YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.1stYear',
+                defaultMessage: '1ST YEAR',
+              }),
+            },
+            '2ND YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.2ndYear',
+                defaultMessage: '2ND YEAR',
+              }),
+            },
+            '3RD YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.3rdYear',
+                defaultMessage: '3RD YEAR',
+              }),
+            },
+            '4TH YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.4thYear',
+                defaultMessage: '4TH YEAR',
+              }),
+            },
+          }}
+          rules={[{ required: true }]}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="section"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.section',
+            defaultMessage: 'Section',
+          })}
+        />
       </ModalForm>
-      <UpdateForm
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
+      {/* <UpdateForm */}
+
+      <ModalForm
+        title={intl.formatMessage({
+          id: 'pages.searchTable.createForm.newRule',
+          defaultMessage: 'New rule',
+        })}
+        width="400px"
+        visible={createModalVisible}
+        onVisibleChange={handleModalVisible}
+        onFinish={async (value) => {
+          const success = await handleAdd(value);
 
           if (success) {
-            handleUpdateModalVisible(false);
-            setCurrentRow(undefined);
+            handleModalVisible(false);
 
             if (actionRef.current) {
               actionRef.current.reload();
             }
           }
         }}
-        onCancel={() => {
-          handleUpdateModalVisible(false);
-
-          if (!showDetail) {
-            setCurrentRow(undefined);
-          }
-        }}
-        updateModalVisible={updateModalVisible}
-        values={currentRow || {}}
-      />
+      >
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="student_lrn"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.studentLrn',
+            defaultMessage: 'Student LRN',
+          })}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="first_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.firstName',
+            defaultMessage: 'First name',
+          })}
+        />
+        <ProFormText
+          width="md"
+          name="middle_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.middleName',
+            defaultMessage: 'Middle name',
+          })}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="last_name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.lastName',
+            defaultMessage: 'Last name',
+          })}
+        />
+        <ProFormDigit
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="age"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.age',
+            defaultMessage: 'Age',
+          })}
+        />
+        <ProFormSelect
+          name="year_level"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.yearLevel',
+            defaultMessage: 'Year level',
+          })}
+          width="md"
+          valueEnum={{
+            '1ST YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.1stYear',
+                defaultMessage: '1ST YEAR',
+              }),
+            },
+            '2ND YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.2ndYear',
+                defaultMessage: '2ND YEAR',
+              }),
+            },
+            '3RD YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.3rdYear',
+                defaultMessage: '3RD YEAR',
+              }),
+            },
+            '4TH YEAR': {
+              text: intl.formatMessage({
+                id: 'pages.searchTable.yearLevel.4thYear',
+                defaultMessage: '4TH YEAR',
+              }),
+            },
+          }}
+          rules={[{ required: true }]}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          width="md"
+          name="section"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.form.section',
+            defaultMessage: 'Section',
+          })}
+        />
+      </ModalForm>
 
       <Drawer
         width={600}

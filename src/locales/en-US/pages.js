@@ -90,4 +90,13 @@ export default {
   'pages.searchTable.yearLevel.2ndYear': '2ND YEAR',
   'pages.searchTable.yearLevel.3rdYear': '3RD YEAR',
   'pages.searchTable.yearLevel.4thYear': '4TH YEAR',
+
+  // form
+  'pages.searchTable.form.studentLrn': 'Student LRN',
+  'pages.searchTable.form.firstName': 'First name',
+  'pages.searchTable.form.middleName': 'Middle name',
+  'pages.searchTable.form.lastName': 'Last name',
+  'pages.searchTable.form.age': 'Age',
+  'pages.searchTable.form.yearLevel': 'Year level',
+  'pages.searchTable.form.section': 'Section',
 };

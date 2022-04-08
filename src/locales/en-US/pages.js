@@ -92,6 +92,8 @@ export default {
   'pages.searchTable.yearLevel.4thYear': '4TH YEAR',
 
   // form
+  'pages.searchTable.form.createStudent': 'Create Student',
+  'pages.searchTable.form.editStudent': 'Edit Student',
   'pages.searchTable.form.studentLrn': 'Student LRN',
   'pages.searchTable.form.firstName': 'First name',
   'pages.searchTable.form.middleName': 'Middle name',

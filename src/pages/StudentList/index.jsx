@@ -13,7 +13,7 @@ import {
 } from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { createStudent, deleteStudent, getStudentsList } from '@/services/students';
+import { createStudent, deleteStudent, editStudent, getStudentsList } from '@/services/students';
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -41,15 +41,11 @@ const handleAdd = async (fields) => {
  * @param fields
  */
 
-const handleUpdate = async (fields) => {
+const handleUpdate = async (id, fields) => {
   const hide = message.loading('Configuring');
 
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    await editStudent(id, fields);
     hide();
     message.success('Configuration is successful');
     return true;
@@ -249,7 +245,7 @@ const TableList = () => {
       render: (_, record) => [
         <a
           key="config"
-          onClick={() => {
+          onClick={async () => {
             handleUpdateModalVisible(true);
             setCurrentRow(record);
           }}
@@ -374,8 +370,8 @@ const TableList = () => {
       )}
       <ModalForm
         title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
+          id: 'pages.searchTable.form.createStudent',
+          defaultMessage: 'Create Student',
         })}
         width="400px"
         visible={createModalVisible}
@@ -501,137 +497,143 @@ const TableList = () => {
           })}
         />
       </ModalForm>
-      {/* <UpdateForm */}
 
-      <ModalForm
-        title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
-        })}
-        width="400px"
-        visible={createModalVisible}
-        onVisibleChange={handleModalVisible}
-        onFinish={async (value) => {
-          const success = await handleAdd(value);
-
-          if (success) {
-            handleModalVisible(false);
-
-            if (actionRef.current) {
-              actionRef.current.reload();
+      {currentRow && (
+        <ModalForm
+          title={intl.formatMessage({
+            id: 'pages.searchTable.form.editStudent',
+            defaultMessage: 'Edit Student',
+          })}
+          width="400px"
+          visible={updateModalVisible}
+          onVisibleChange={handleUpdateModalVisible}
+          onFinish={async (value) => {
+            const success = await handleUpdate(currentRow.id, value);
+            if (success) {
+              handleModalVisible(false);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
             }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="student_lrn"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.studentLrn',
-            defaultMessage: 'Student LRN',
-          })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="first_name"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.firstName',
-            defaultMessage: 'First name',
-          })}
-        />
-        <ProFormText
-          width="md"
-          name="middle_name"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.middleName',
-            defaultMessage: 'Middle name',
-          })}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="last_name"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.lastName',
-            defaultMessage: 'Last name',
-          })}
-        />
-        <ProFormDigit
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="age"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.age',
-            defaultMessage: 'Age',
-          })}
-        />
-        <ProFormSelect
-          name="year_level"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.yearLevel',
-            defaultMessage: 'Year level',
-          })}
-          width="md"
-          valueEnum={{
-            '1ST YEAR': {
-              text: intl.formatMessage({
-                id: 'pages.searchTable.yearLevel.1stYear',
-                defaultMessage: '1ST YEAR',
-              }),
-            },
-            '2ND YEAR': {
-              text: intl.formatMessage({
-                id: 'pages.searchTable.yearLevel.2ndYear',
-                defaultMessage: '2ND YEAR',
-              }),
-            },
-            '3RD YEAR': {
-              text: intl.formatMessage({
-                id: 'pages.searchTable.yearLevel.3rdYear',
-                defaultMessage: '3RD YEAR',
-              }),
-            },
-            '4TH YEAR': {
-              text: intl.formatMessage({
-                id: 'pages.searchTable.yearLevel.4thYear',
-                defaultMessage: '4TH YEAR',
-              }),
-            },
           }}
-          rules={[{ required: true }]}
-        />
-        <ProFormText
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          width="md"
-          name="section"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.form.section',
-            defaultMessage: 'Section',
-          })}
-        />
-      </ModalForm>
+        >
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="student_lrn"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.studentLrn',
+              defaultMessage: 'Student LRN',
+            })}
+            initialValue={currentRow.student_lrn}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="first_name"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.firstName',
+              defaultMessage: 'First name',
+            })}
+            initialValue={currentRow.first_name}
+          />
+          <ProFormText
+            width="md"
+            name="middle_name"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.middleName',
+              defaultMessage: 'Middle name',
+            })}
+            initialValue={currentRow.middle_name}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="last_name"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.lastName',
+              defaultMessage: 'Last name',
+            })}
+            initialValue={currentRow.last_name}
+          />
+          <ProFormDigit
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="age"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.age',
+              defaultMessage: 'Age',
+            })}
+            initialValue={currentRow.age}
+          />
+          <ProFormSelect
+            name="year_level"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.yearLevel',
+              defaultMessage: 'Year level',
+            })}
+            width="md"
+            valueEnum={{
+              '1ST YEAR': {
+                text: intl.formatMessage({
+                  id: 'pages.searchTable.yearLevel.1stYear',
+                  defaultMessage: '1ST YEAR',
+                }),
+              },
+              '2ND YEAR': {
+                text: intl.formatMessage({
+                  id: 'pages.searchTable.yearLevel.2ndYear',
+                  defaultMessage: '2ND YEAR',
+                }),
+              },
+              '3RD YEAR': {
+                text: intl.formatMessage({
+                  id: 'pages.searchTable.yearLevel.3rdYear',
+                  defaultMessage: '3RD YEAR',
+                }),
+              },
+              '4TH YEAR': {
+                text: intl.formatMessage({
+                  id: 'pages.searchTable.yearLevel.4thYear',
+                  defaultMessage: '4TH YEAR',
+                }),
+              },
+            }}
+            rules={[{ required: true }]}
+            initialValue={currentRow.year_level}
+          />
+          <ProFormText
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            width="md"
+            name="section"
+            label={intl.formatMessage({
+              id: 'pages.searchTable.form.section',
+              defaultMessage: 'Section',
+            })}
+            initialValue={currentRow.section}
+          />
+        </ModalForm>
+      )}
 
       <Drawer
         width={600}

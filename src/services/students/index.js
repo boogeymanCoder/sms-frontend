@@ -42,6 +42,19 @@ export async function createStudent(body) {
   });
 }
 
+export async function editStudent(id, body) {
+  const token = Cookies.get('accessToken');
+  console.log({ body });
+
+  return request(`${API_URL}/students/${id}`, {
+    method: 'PATCH',
+    data: body,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
 export async function deleteStudent(id) {
   const token = Cookies.get('accessToken');
 

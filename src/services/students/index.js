@@ -21,10 +21,22 @@ export async function getStudentsList(params, sort, filter) {
       sort_column: sorter?.[0]?.[0],
       sort_order: sorter?.[0]?.[1] === 'ascend' ? 'asc' : 'desc',
     },
+    skipErrorHandler: true,
   }).then((res) => {
     console.log({ res });
     res.data.forEach((data) => (data.key = data.id));
     return res;
+  });
+}
+export async function getStudentById(id) {
+  const token = Cookies.get('accessToken');
+
+  return request(`${API_URL}/students/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    skipErrorHandler: true,
   });
 }
 
@@ -39,6 +51,7 @@ export async function createStudent(body) {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
+    skipErrorHandler: true,
   });
 }
 
@@ -53,6 +66,7 @@ export async function editStudent(id, body) {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
+    skipErrorHandler: true,
   });
 }
 export async function deleteStudent(id) {
@@ -63,5 +77,6 @@ export async function deleteStudent(id) {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    skipErrorHandler: true,
   });
 }

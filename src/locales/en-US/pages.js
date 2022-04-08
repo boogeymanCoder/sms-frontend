@@ -103,4 +103,7 @@ export default {
   'pages.searchTable.form.age': 'Age',
   'pages.searchTable.form.yearLevel': 'Year level',
   'pages.searchTable.form.section': 'Section',
+
+  // errors
+  'pages.searchTable.form.error.lrnError': 'LRN has been taken',
 };

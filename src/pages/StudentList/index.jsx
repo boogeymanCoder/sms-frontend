@@ -13,7 +13,13 @@ import {
 } from '@ant-design/pro-form';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import { rule, addRule, updateRule, removeRule } from '@/services/ant-design-pro/api';
-import { createStudent, deleteStudent, editStudent, getStudentsList } from '@/services/students';
+import {
+  createStudent,
+  deleteStudent,
+  editStudent,
+  getStudentById,
+  getStudentsList,
+} from '@/services/students';
 /**
  * @en-US Add node
  * @zh-CN 添加节点
@@ -94,6 +100,9 @@ const TableList = () => {
   const actionRef = useRef();
   const [currentRow, setCurrentRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
+  const [lrnError, setLrnError] = useState(false);
+  const formRef = useRef();
+  const editFormRef = useRef();
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -115,8 +124,8 @@ const TableList = () => {
       render: (dom, entity) => {
         return (
           <a
-            onClick={() => {
-              setCurrentRow(entity);
+            onClick={async () => {
+              setCurrentRow(await getStudentById(entity.id));
               setShowDetail(true);
             }}
           >
@@ -246,8 +255,12 @@ const TableList = () => {
         <a
           key="config"
           onClick={async () => {
+            setLrnError(false);
+            setCurrentRow(await getStudentById(record.id));
+            console.log({ record });
+
+            editFormRef?.current?.resetFields();
             handleUpdateModalVisible(true);
-            setCurrentRow(record);
           }}
         >
           <FormattedMessage id="pages.searchTable.actions.edit" defaultMessage="Edit" />
@@ -296,7 +309,9 @@ const TableList = () => {
             type="primary"
             key="primary"
             onClick={() => {
+              setLrnError(false);
               handleModalVisible(true);
+              formRef?.current?.resetFields();
             }}
           >
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
@@ -373,6 +388,7 @@ const TableList = () => {
           id: 'pages.searchTable.form.createStudent',
           defaultMessage: 'Create Student',
         })}
+        formRef={formRef}
         width="400px"
         visible={createModalVisible}
         onVisibleChange={handleModalVisible}
@@ -380,11 +396,15 @@ const TableList = () => {
           const success = await handleAdd(value);
 
           if (success) {
+            console.log('add success!');
             handleModalVisible(false);
 
             if (actionRef.current) {
               actionRef.current.reload();
             }
+          } else {
+            console.log('add failed!');
+            setLrnError(true);
           }
         }}
       >
@@ -400,6 +420,18 @@ const TableList = () => {
             id: 'pages.searchTable.form.studentLrn',
             defaultMessage: 'Student LRN',
           })}
+          extra={
+            <>
+              {lrnError && (
+                <span style={{ color: 'red', marginTop: -20 }}>
+                  <FormattedMessage
+                    id={'pages.searchTable.form.error.lrnError'}
+                    defaultMessage="LRN has been taken"
+                  />
+                </span>
+              )}
+            </>
+          }
         />
         <ProFormText
           rules={[
@@ -504,9 +536,13 @@ const TableList = () => {
             id: 'pages.searchTable.form.editStudent',
             defaultMessage: 'Edit Student',
           })}
+          formRef={editFormRef}
           width="400px"
           visible={updateModalVisible}
-          onVisibleChange={handleUpdateModalVisible}
+          onVisibleChange={(visible) => {
+            editFormRef?.current?.resetFields();
+            handleUpdateModalVisible(visible);
+          }}
           onFinish={async (value) => {
             const success = await handleUpdate(currentRow.id, value);
             if (success) {
@@ -514,9 +550,12 @@ const TableList = () => {
               if (actionRef.current) {
                 actionRef.current.reload();
               }
+            } else {
+              setLrnError(true);
             }
           }}
         >
+          {console.log('update', { currentRow })}
           <ProFormText
             rules={[
               {
@@ -530,6 +569,18 @@ const TableList = () => {
               defaultMessage: 'Student LRN',
             })}
             initialValue={currentRow.student_lrn}
+            extra={
+              <>
+                {lrnError && (
+                  <span style={{ color: 'red', marginTop: -20 }}>
+                    <FormattedMessage
+                      id={'pages.searchTable.form.error.lrnError'}
+                      defaultMessage="LRN has been taken"
+                    />
+                  </span>
+                )}
+              </>
+            }
           />
           <ProFormText
             rules={[

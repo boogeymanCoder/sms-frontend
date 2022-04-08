@@ -1,13 +1,12 @@
 export default {
-  'pages.layouts.userLayout.title':
-    'Ant Design is the most influential web design specification in Xihu district',
+  'pages.layouts.userLayout.title': 'Student Management System',
   'pages.login.accountLogin.tab': 'Account Login',
-  'pages.login.accountLogin.errorMessage': 'Incorrect username/password(admin/ant.design)',
+  'pages.login.accountLogin.errorMessage': 'Incorrect username/password',
   'pages.login.failure': 'Login failed, please try again!',
   'pages.login.success': 'Login successful!',
-  'pages.login.username.placeholder': 'Username: admin or user',
+  'pages.login.username.placeholder': 'Email',
   'pages.login.username.required': 'Please input your username!',
-  'pages.login.password.placeholder': 'Password: ant.design',
+  'pages.login.password.placeholder': 'Password',
   'pages.login.password.required': 'Please input your password!',
   'pages.login.phoneLogin.tab': 'Phone Login',
   'pages.login.phoneLogin.errorMessage': 'Verification Code Error',
@@ -71,6 +70,8 @@ export default {
   'pages.searchTable.batchApproval': 'batch approval',
 
   // columns
+  'pages.searchTable.title.studentList': 'Student list',
+
   'pages.searchTable.title.studentLrn': 'Student LRN',
   'pages.searchTable.title.firstName': 'First name',
   'pages.searchTable.title.middleName': 'Middle name',
@@ -79,6 +80,7 @@ export default {
   'pages.searchTable.title.yearLevel': 'Year level',
   'pages.searchTable.title.section': 'Section',
   'pages.searchTable.title.actions': 'Actions',
+
   'pages.searchTable.actions.edit': 'Edit',
   'pages.searchTable.actions.delete': 'Delete',
   'pages.searchTable.areYouSure': 'Are you sure?',

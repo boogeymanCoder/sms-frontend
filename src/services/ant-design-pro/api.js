@@ -18,7 +18,12 @@ export async function currentUser(options) {
 /** 退出登录接口 POST /api/login/outLogin */
 
 export async function outLogin(options) {
-  return request('/api/login/outLogin', {
+  const token = Cookies.get('accessToken');
+  Cookies.remove('accessToken');
+  return request(`${API_URL}/logout`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     method: 'POST',
     ...(options || {}),
   });
